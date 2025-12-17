@@ -1,31 +1,28 @@
 package com.example.demo.model;
 
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "users")
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
-    private long id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true)
     private String email;
-    private String Password;
-    public User(long id, String email, String password) {
-        this.id = id;
-        this.email = email;
-        Password = password;
-    }
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public String getPassword() {
-        return Password;
-    }
-    public void setPassword(String password) {
-        Password = password;
-    }
-    
+
+    private String password;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<String> role = new HashSet<>();
 }

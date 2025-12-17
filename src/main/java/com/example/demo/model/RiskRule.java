@@ -1,49 +1,33 @@
 package com.example.demo.model;
 
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDateTime;
 
+@Entity
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RiskRule {
-    private long id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true, nullable = false)
     private String ruleName;
-    private int Threshold;
-    private int scoreImpact;
+
+    private String ruleType;
+    private Integer threshold;
+    private Integer scoreImpact;
+
     private LocalDateTime createdAt;
-    public RiskRule(long id, String ruleName, int threshold, int scoreImpact, LocalDateTime createdAt) {
-        this.id = id;
-        this.ruleName = ruleName;
-        Threshold = threshold;
-        this.scoreImpact = scoreImpact;
-        this.createdAt = createdAt;
+
+    @PrePersist
+    void onCreate() {
+        createdAt = LocalDateTime.now();
     }
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
-    public String getRuleName() {
-        return ruleName;
-    }
-    public void setRuleName(String ruleName) {
-        this.ruleName = ruleName;
-    }
-    public int getThreshold() {
-        return Threshold;
-    }
-    public void setThreshold(int threshold) {
-        Threshold = threshold;
-    }
-    public int getScoreImpact() {
-        return scoreImpact;
-    }
-    public void setScoreImpact(int scoreImpact) {
-        this.scoreImpact = scoreImpact;
-    }
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-    
 }
