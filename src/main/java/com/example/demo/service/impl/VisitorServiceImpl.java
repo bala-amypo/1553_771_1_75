@@ -21,11 +21,13 @@ public class VisitorServiceImpl implements VisitorService {
     @Override
     public Visitor createVisitor(Visitor v) {
 
-        if (v == null)
+        if (v == null) {
             throw new BadRequestException("visitor data required");
+        }
 
-        if (v.getPhone() == null || v.getPhone().isBlank())
+        if (v.getPhone() == null || v.getPhone().isBlank()) {
             throw new BadRequestException("phone required");
+        }
 
         return repo.save(v);
     }

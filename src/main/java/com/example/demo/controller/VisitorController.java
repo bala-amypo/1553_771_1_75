@@ -10,24 +10,27 @@ import java.util.List;
 @RequestMapping("/api/visitors")
 public class VisitorController {
 
-    private final VisitorService service;
+    private final VisitorService visitorService;
 
-    public VisitorController(VisitorService service) {
-        this.service = service;
+    public VisitorController(VisitorService visitorService) {
+        this.visitorService = visitorService;
     }
 
+    // CREATE VISITOR
     @PostMapping
-    public Visitor create(@RequestBody Visitor visitor) {
-        return service.createVisitor(visitor);
+    public Visitor createVisitor(@RequestBody Visitor visitor) {
+        return visitorService.createVisitor(visitor);
     }
 
+    // GET VISITOR BY ID
     @GetMapping("/{id}")
-    public Visitor one(@PathVariable Long id) {
-        return service.getVisitor(id);
+    public Visitor getVisitor(@PathVariable Long id) {
+        return visitorService.getVisitor(id);
     }
 
+    // GET ALL VISITORS
     @GetMapping
-    public List<Visitor> all() {
-        return service.getAllVisitors();
+    public List<Visitor> getAllVisitors() {
+        return visitorService.getAllVisitors();
     }
 }
