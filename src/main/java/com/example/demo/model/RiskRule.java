@@ -1,16 +1,14 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+
 
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
+
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+
 public class RiskRule {
 
     @Id
