@@ -32,7 +32,6 @@ public class VisitorServiceImpl implements VisitorService {
 
     @Override
     public Visitor getVisitor(Long id) {
-
         return repo.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Visitor not found"));
