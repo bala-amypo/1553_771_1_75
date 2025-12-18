@@ -7,10 +7,11 @@ import com.example.demo.model.Visitor;
 import com.example.demo.repository.VisitLogRepository;
 import com.example.demo.repository.VisitorRepository;
 import com.example.demo.service.VisitLogService;
+import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
+@Service
 public class VisitLogServiceImpl implements VisitLogService {
 
     private final VisitLogRepository visitLogRepository;
@@ -30,17 +31,7 @@ public class VisitLogServiceImpl implements VisitLogService {
                 .orElseThrow(() -> new ResourceNotFoundException("Visitor not found"));
 
         if (log.getPurpose() == null || log.getPurpose().isBlank()) {
-            throw new BadRequestException("purpose required");
-        }
-
-        if (log.getLocation() == null || log.getLocation().isBlank()) {
-            throw new BadRequestException("location required");
-        }
-
-        if (log.getExitTime() != null && log.getEntryTime() != null) {
-            if (!log.getExitTime().isAfter(log.getEntryTime())) {
-                throw new BadRequestException("exitTime must be after entryTime");
-            }
+            throw new BadRequestException("Purpose required");
         }
 
         log.setVisitor(visitor);
