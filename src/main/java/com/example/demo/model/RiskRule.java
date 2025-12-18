@@ -1,30 +1,30 @@
-// package com.example.demo.model;
+package com.example.demo.model;
 
-// import jakarta.persistence.*;
-// import lombok.*;
+import jakarta.persistence.*;
+import lombok.*;
 
-// import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 
-// @Entity
-// @Getter
-// @Setter
-// @Builder
-// @NoArgsConstructor
-// @AllArgsConstructor
-// public class RiskRule {
+@Entity
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class RiskRule {
 
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-//     private String ruleName;
-//     private String ruleType;
-//     private Integer threshold;
-//     private Integer scoreImpact;
-//     private LocalDateTime createdAt;
+    private String ruleName;
+    private String ruleType;
+    private Integer threshold;
+    private Integer scoreImpact;
+    private LocalDateTime createdAt;
 
-//     @PrePersist
-//     public void prePersist() {
-//         this.createdAt = LocalDateTime.now();
-//     }
-// }
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+    }
+}
