@@ -27,4 +27,7 @@ public class RiskScoreController {
     }
 
     @GetMapping
-    public List<RiskSc
+    public List<RiskScore> getAllScores() {
+        return riskScoreService.getAllScores();
+    }
+}
