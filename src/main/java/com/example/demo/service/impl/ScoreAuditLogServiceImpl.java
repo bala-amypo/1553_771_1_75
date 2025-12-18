@@ -11,7 +11,7 @@ import com.example.demo.repository.VisitorRepository;
 import com.example.demo.service.ScoreAuditLogService;
 
 import java.util.List;
-
+@Service
 public class ScoreAuditLogServiceImpl implements ScoreAuditLogService {
 
     private final ScoreAuditLogRepository auditLogRepository;
