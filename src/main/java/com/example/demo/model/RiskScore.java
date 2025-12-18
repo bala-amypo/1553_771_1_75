@@ -1,26 +1,26 @@
-package com.example.demo.model;
+// package com.example.demo.model;
 
-import jakarta.persistence.*;
-import lombok.*;
+// import jakarta.persistence.*;
+// import lombok.*;
 
-import java.time.LocalDateTime;
+// import java.time.LocalDateTime;
 
-@Entity
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class RiskScore {
+// @Entity
+// @Getter
+// @Setter
+// @Builder
+// @NoArgsConstructor
+// @AllArgsConstructor
+// public class RiskScore {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//     @Id
+//     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//     private Long id;
 
-    @OneToOne
-    private Visitor visitor;
+//     @OneToOne
+//     private Visitor visitor;
 
-    private Integer totalScore;
-    private String riskLevel;
-    private LocalDateTime evaluatedAt;
-}
+//     private Integer totalScore;
+//     private String riskLevel;
+//     private LocalDateTime evaluatedAt;
+// }
