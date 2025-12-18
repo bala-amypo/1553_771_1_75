@@ -7,7 +7,7 @@ import com.example.demo.model.User;
 
 public interface UserService {
 
-    void register(RegisterRequest request);
+    User register(RegisterRequest request);
 
     AuthResponse login(AuthRequest request);
 

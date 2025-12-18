@@ -1,54 +1,59 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.model.RiskScore;
+import com.example.demo.model.RiskRule;
+import com.example.demo.model.ScoreAuditLog;
 import com.example.demo.model.Visitor;
-import com.example.demo.repository.RiskScoreRepository;
+import com.example.demo.repository.RiskRuleRepository;
+import com.example.demo.repository.ScoreAuditLogRepository;
 import com.example.demo.repository.VisitorRepository;
-import com.example.demo.service.RiskScoreService;
-import com.example.demo.util.RiskLevelUtils;
+import com.example.demo.service.ScoreAuditLogService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-public class RiskScoreServiceImpl implements RiskScoreService {
+public class ScoreAuditLogServiceImpl implements ScoreAuditLogService {
 
-    private final RiskScoreRepository riskScoreRepository;
+    private final ScoreAuditLogRepository auditLogRepository;
     private final VisitorRepository visitorRepository;
+    private final RiskRuleRepository riskRuleRepository;
 
-    public RiskScoreServiceImpl(
-            RiskScoreRepository riskScoreRepository,
-            VisitorRepository visitorRepository
+    public ScoreAuditLogServiceImpl(
+            ScoreAuditLogRepository auditLogRepository,
+            VisitorRepository visitorRepository,
+            RiskRuleRepository riskRuleRepository
     ) {
-        this.riskScoreRepository = riskScoreRepository;
+        this.auditLogRepository = auditLogRepository;
         this.visitorRepository = visitorRepository;
+        this.riskRuleRepository = riskRuleRepository;
     }
 
     @Override
-    public RiskScore evaluateVisitor(Long visitorId) {
+    public ScoreAuditLog logScoreChange(Long visitorId, Long ruleId, ScoreAuditLog log) {
+        if (log.getReason() == null || log.getReason().isBlank()) {
+            throw new BadRequestException("reason required");
+        }
+
         Visitor visitor = visitorRepository.findById(visitorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Visitor not found"));
 
-        int totalScore = 0; // tests expect >= 0
+        RiskRule rule = riskRuleRepository.findById(ruleId)
+                .orElseThrow(() -> new ResourceNotFoundException("RiskRule not found"));
 
-        RiskScore score = RiskScore.builder()
-                .visitor(visitor)
-                .totalScore(totalScore)
-                .riskLevel(RiskLevelUtils.determineRiskLevel(totalScore))
-                .evaluatedAt(LocalDateTime.now())
-                .build();
+        log.setVisitor(visitor);
+        log.setAppliedRule(rule);
 
-        return riskScoreRepository.save(score);
+        return auditLogRepository.save(log);
     }
 
     @Override
-    public RiskScore getScoreForVisitor(Long visitorId) {
-        return riskScoreRepository.findByVisitorId(visitorId)
-                .orElseThrow(() -> new ResourceNotFoundException("RiskScore not found"));
+    public ScoreAuditLog getLog(Long id) {
+        return auditLogRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("ScoreAuditLog not found"));
     }
 
     @Override
-    public List<RiskScore> getAllScores() {
-        return riskScoreRepository.findAll();
+    public List<ScoreAuditLog> getLogsByVisitor(Long visitorId) {
+        return auditLogRepository.findByVisitorId(visitorId);
     }
 }
