@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.*;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Visitor;
 import com.example.demo.repository.VisitorRepository;
 import com.example.demo.service.VisitorService;
@@ -18,7 +19,7 @@ public class VisitorServiceImpl implements VisitorService {
     @Override
     public Visitor createVisitor(Visitor visitor) {
         if (visitor.getPhone() == null || visitor.getPhone().isBlank()) {
-            throw new BadRequestException("phone required");
+            throw new BadRequestException("Phone number is required");
         }
         return repository.save(visitor);
     }
