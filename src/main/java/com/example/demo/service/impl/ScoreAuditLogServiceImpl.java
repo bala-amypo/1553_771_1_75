@@ -30,7 +30,7 @@ public class ScoreAuditLogServiceImpl implements ScoreAuditLogService {
     }
 
     @Override
-    public ScoreAuditLog createAuditLog(Long visitorId, Long ruleId, ScoreAuditLog log) {
+    public ScoreAuditLog logScoreChange(Long visitorId, Long ruleId, ScoreAuditLog log) {
 
         Visitor visitor = visitorRepository.findById(visitorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Visitor not found"));
@@ -45,13 +45,13 @@ public class ScoreAuditLogServiceImpl implements ScoreAuditLogService {
     }
 
     @Override
-    public ScoreAuditLog getAuditLog(Long id) {
+    public ScoreAuditLog getLog(Long id) {
         return scoreAuditLogRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Audit log not found"));
     }
 
     @Override
-    public List<ScoreAuditLog> getAllLogs() {
-        return scoreAuditLogRepository.findAll();
+    public List<ScoreAuditLog> getLogsByVisitor(Long visitorId) {
+        return scoreAuditLogRepository.findByVisitorId(visitorId);
     }
 }

@@ -2,14 +2,12 @@ package com.example.demo.controller;
 
 import com.example.demo.model.ScoreAuditLog;
 import com.example.demo.service.ScoreAuditLogService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/score-logs")
-@Tag(name = "Score Audit Logs")
+@RequestMapping("/api/audit-logs")
 public class ScoreAuditLogController {
 
     private final ScoreAuditLogService scoreAuditLogService;
@@ -19,7 +17,7 @@ public class ScoreAuditLogController {
     }
 
     @PostMapping("/{visitorId}/{ruleId}")
-    public ScoreAuditLog createLog(
+    public ScoreAuditLog logScoreChange(
             @PathVariable Long visitorId,
             @PathVariable Long ruleId,
             @RequestBody ScoreAuditLog log

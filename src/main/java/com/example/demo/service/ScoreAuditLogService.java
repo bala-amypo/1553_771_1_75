@@ -5,11 +5,9 @@ import java.util.List;
 
 public interface ScoreAuditLogService {
 
-    ScoreAuditLog logScoreChange(Long visitorId,
-                                 Long ruleId,
-                                 ScoreAuditLog log);
-
-    List<ScoreAuditLog> getLogsByVisitor(Long visitorId);
+    ScoreAuditLog logScoreChange(Long visitorId, Long ruleId, ScoreAuditLog log);
 
     ScoreAuditLog getLog(Long id);
+
+    List<ScoreAuditLog> getLogsByVisitor(Long visitorId);
 }
