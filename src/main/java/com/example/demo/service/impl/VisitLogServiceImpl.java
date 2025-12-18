@@ -7,48 +7,54 @@ import com.example.demo.model.Visitor;
 import com.example.demo.repository.VisitLogRepository;
 import com.example.demo.repository.VisitorRepository;
 import com.example.demo.service.VisitLogService;
-import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-@Service
 public class VisitLogServiceImpl implements VisitLogService {
 
-    private final VisitLogRepository logRepo;
-    private final VisitorRepository visitorRepo;
+    private final VisitLogRepository visitLogRepository;
+    private final VisitorRepository visitorRepository;
 
-    public VisitLogServiceImpl(VisitLogRepository logRepo,
-                               VisitorRepository visitorRepo) {
-        this.logRepo = logRepo;
-        this.visitorRepo = visitorRepo;
+    public VisitLogServiceImpl(
+            VisitLogRepository visitLogRepository,
+            VisitorRepository visitorRepository
+    ) {
+        this.visitLogRepository = visitLogRepository;
+        this.visitorRepository = visitorRepository;
     }
 
     @Override
     public VisitLog createVisitLog(Long visitorId, VisitLog log) {
+        Visitor visitor = visitorRepository.findById(visitorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Visitor not found"));
 
-        Visitor visitor = visitorRepo.findById(visitorId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Visitor not found"));
+        if (log.getPurpose() == null || log.getPurpose().isBlank()) {
+            throw new BadRequestException("purpose required");
+        }
 
-        if (log.getExitTime() != null &&
-            log.getExitTime().isBefore(log.getEntryTime())) {
-            throw new BadRequestException(
-                    "exitTime must be after entryTime");
+        if (log.getLocation() == null || log.getLocation().isBlank()) {
+            throw new BadRequestException("location required");
+        }
+
+        if (log.getExitTime() != null && log.getEntryTime() != null) {
+            if (!log.getExitTime().isAfter(log.getEntryTime())) {
+                throw new BadRequestException("exitTime must be after entryTime");
+            }
         }
 
         log.setVisitor(visitor);
-        return logRepo.save(log);
+        return visitLogRepository.save(log);
     }
 
     @Override
     public VisitLog getLog(Long id) {
-        return logRepo.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("VisitLog not found"));
+        return visitLogRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("VisitLog not found"));
     }
 
     @Override
     public List<VisitLog> getLogsByVisitor(Long visitorId) {
-        return logRepo.findByVisitorId(visitorId);
+        return visitLogRepository.findByVisitorId(visitorId);
     }
 }

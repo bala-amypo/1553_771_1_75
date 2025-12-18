@@ -1,46 +1,36 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.BadRequestException;
-import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.exception.*;
 import com.example.demo.model.Visitor;
 import com.example.demo.repository.VisitorRepository;
 import com.example.demo.service.VisitorService;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public class VisitorServiceImpl implements VisitorService {
 
-    private final VisitorRepository repo;
+    private final VisitorRepository repository;
 
-    public VisitorServiceImpl(VisitorRepository repo) {
-        this.repo = repo;
+    public VisitorServiceImpl(VisitorRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public Visitor createVisitor(Visitor v) {
-
-        if (v == null) {
-            throw new BadRequestException("visitor data required");
-        }
-
-        if (v.getPhone() == null || v.getPhone().isBlank()) {
+    public Visitor createVisitor(Visitor visitor) {
+        if (visitor.getPhone() == null || visitor.getPhone().isBlank()) {
             throw new BadRequestException("phone required");
         }
-
-        return repo.save(v);
+        return repository.save(visitor);
     }
 
     @Override
     public Visitor getVisitor(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Visitor not found"));
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Visitor not found"));
     }
 
     @Override
     public List<Visitor> getAllVisitors() {
-        return repo.findAll();
+        return repository.findAll();
     }
 }
