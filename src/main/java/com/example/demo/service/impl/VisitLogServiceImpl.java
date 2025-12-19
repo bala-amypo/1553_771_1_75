@@ -8,6 +8,8 @@ import com.example.demo.repository.VisitorRepository;
 import com.example.demo.service.VisitLogService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class VisitLogServiceImpl implements VisitLogService {
 
@@ -24,8 +26,7 @@ public class VisitLogServiceImpl implements VisitLogService {
     public VisitLog createVisitLog(Long visitorId, VisitLog log) {
 
         Visitor visitor = visitorRepository.findById(visitorId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Visitor not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Visitor not found"));
 
         if (log.getPurpose() == null || log.getPurpose().isBlank()) {
             throw new IllegalArgumentException("purpose required");
@@ -41,9 +42,22 @@ public class VisitLogServiceImpl implements VisitLogService {
             throw new IllegalArgumentException("exitTime must be after entryTime");
         }
 
-        // ✅ SET VISITOR HERE
         log.setVisitor(visitor);
-
         return visitLogRepository.save(log);
+    }
+
+    @Override
+    public VisitLog getLog(Long id) {
+        return visitLogRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Visit log not found"));
+    }
+
+    @Override
+    public List<VisitLog> getLogsByVisitor(Long visitorId) {
+
+        Visitor visitor = visitorRepository.findById(visitorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Visitor not found"));
+
+        return visitLogRepository.findByVisitor(visitor);
     }
 }
