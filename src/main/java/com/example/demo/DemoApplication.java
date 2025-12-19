@@ -1,14 +1,13 @@
-package com.example.demo.util;
+package com.example.demo;
 
-public class RiskLevelUtils {
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-    public static String determineRiskLevel(int score) {
-        if (score < 30) {
-            return "LOW";
-        } else if (score < 70) {
-            return "MEDIUM";
-        } else {
-            return "HIGH";
-        }
-    }
+@SpringBootApplication
+public class DemoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(DemoApplication.class, args);
+	}
+
 }
