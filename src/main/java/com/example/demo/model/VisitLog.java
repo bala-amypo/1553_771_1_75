@@ -2,38 +2,31 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class VisitLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Visitor comes from path variable, not request body
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "visitor_id")
+    @ManyToOne
     private Visitor visitor;
 
     private LocalDateTime entryTime;
-
     private LocalDateTime exitTime;
 
     private String purpose;
-
     private String location;
 
     @PrePersist
     public void prePersist() {
-        if (this.entryTime == null) {
-            this.entryTime = LocalDateTime.now();
+        if (entryTime == null) {
+            entryTime = LocalDateTime.now();
         }
     }
 }

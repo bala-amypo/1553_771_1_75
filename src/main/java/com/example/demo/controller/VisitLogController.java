@@ -1,39 +1,53 @@
-package com.example.demo.controller;
+package com.example.demo.service.impl;
 
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.VisitLog;
+import com.example.demo.model.Visitor;
+import com.example.demo.repository.VisitLogRepository;
+import com.example.demo.repository.VisitorRepository;
 import com.example.demo.service.VisitLogService;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/visit-logs")
-@Tag(name = "Visit Logs")
-public class VisitLogController {
+@Service
+public class VisitLogServiceImpl implements VisitLogService {
 
-    private final VisitLogService visitLogService;
+    private final VisitLogRepository visitLogRepository;
+    private final VisitorRepository visitorRepository;
 
-    public VisitLogController(VisitLogService visitLogService) {
-        this.visitLogService = visitLogService;
+    public VisitLogServiceImpl(VisitLogRepository visitLogRepository,
+                               VisitorRepository visitorRepository) {
+        this.visitLogRepository = visitLogRepository;
+        this.visitorRepository = visitorRepository;
     }
 
-   @PostMapping("/{visitorId}")
-public VisitLog createVisitLog(
-        @PathVariable Long visitorId,
-        @RequestBody VisitLog log) {
+    @Override
+    public VisitLog createVisitLog(Long visitorId, VisitLog log) {
+        Visitor visitor = visitorRepository.findById(visitorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Visitor not found"));
 
-    return visitLogService.createVisitLog(visitorId, log);
-}
+        if (log.getExitTime() != null &&
+                log.getExitTime().isBefore(log.getEntryTime())) {
+            throw new IllegalArgumentException("exitTime must be after entryTime");
+        }
 
+        if (log.getPurpose() == null || log.getLocation() == null) {
+            throw new IllegalArgumentException("purpose and location required");
+        }
 
-    @GetMapping("/{id}")
-    public VisitLog getLog(@PathVariable Long id) {
-        return visitLogService.getLog(id);
+        log.setVisitor(visitor);
+        return visitLogRepository.save(log);
     }
 
-    @GetMapping("/visitor/{visitorId}")
-    public List<VisitLog> getLogsByVisitor(@PathVariable Long visitorId) {
-        return visitLogService.getLogsByVisitor(visitorId);
+    @Override
+    public VisitLog getLog(Long id) {
+        return visitLogRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("VisitLog not found"));
+    }
+
+    @Override
+    public List<VisitLog> getLogsByVisitor(Long visitorId) {
+        return visitLogRepository.findByVisitorId(visitorId);
     }
 }
