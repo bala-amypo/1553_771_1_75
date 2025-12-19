@@ -18,13 +18,14 @@ public class VisitLogController {
         this.visitLogService = visitLogService;
     }
 
-    @PostMapping("/{visitorId}")
-    public VisitLog createVisitLog(
-            @PathVariable Long visitorId,
-            @RequestBody VisitLog log
-    ) {
-        return visitLogService.createVisitLog(visitorId, log);
-    }
+   @PostMapping("/{visitorId}")
+public VisitLog createVisitLog(
+        @PathVariable Long visitorId,
+        @RequestBody VisitLog log) {
+
+    return visitLogService.createVisitLog(visitorId, log);
+}
+
 
     @GetMapping("/{id}")
     public VisitLog getLog(@PathVariable Long id) {

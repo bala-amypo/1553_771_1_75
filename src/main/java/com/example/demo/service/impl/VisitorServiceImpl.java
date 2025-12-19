@@ -1,39 +1,70 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.model.VisitLog;
 import com.example.demo.model.Visitor;
+import com.example.demo.repository.VisitLogRepository;
 import com.example.demo.repository.VisitorRepository;
-import com.example.demo.service.VisitorService;
+import com.example.demo.service.VisitLogService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class VisitorServiceImpl implements VisitorService {
+public class VisitLogServiceImpl implements VisitLogService {
 
-    private final VisitorRepository repository;
+    private final VisitLogRepository visitLogRepository;
+    private final VisitorRepository visitorRepository;
 
-    public VisitorServiceImpl(VisitorRepository repository) {
-        this.repository = repository;
+    public VisitLogServiceImpl(VisitLogRepository visitLogRepository,
+                               VisitorRepository visitorRepository) {
+        this.visitLogRepository = visitLogRepository;
+        this.visitorRepository = visitorRepository;
     }
 
+    // ✅ CREATE VISIT LOG
     @Override
-    public Visitor createVisitor(Visitor visitor) {
-        if (visitor.getPhone() == null || visitor.getPhone().isBlank()) {
-            throw new BadRequestException("Phone number is required");
+    public VisitLog createVisitLog(Long visitorId, VisitLog log) {
+
+        Visitor visitor = visitorRepository.findById(visitorId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Visitor not found"));
+
+        if (log.getPurpose() == null || log.getPurpose().isBlank()) {
+            throw new IllegalArgumentException("purpose required");
         }
-        return repository.save(visitor);
+
+        if (log.getLocation() == null || log.getLocation().isBlank()) {
+            throw new IllegalArgumentException("location required");
+        }
+
+        if (log.getExitTime() != null &&
+                log.getEntryTime() != null &&
+                log.getExitTime().isBefore(log.getEntryTime())) {
+            throw new IllegalArgumentException("exitTime must be after entryTime");
+        }
+
+        log.setVisitor(visitor);
+
+        return visitLogRepository.save(log);
     }
 
+    // ✅ GET SINGLE LOG
     @Override
-    public Visitor getVisitor(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Visitor not found"));
+    public VisitLog getLog(Long id) {
+        return visitLogRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Visit log not found"));
     }
 
+    // ✅ GET LOGS BY VISITOR (THIS FIXES YOUR ERROR)
     @Override
-    public List<Visitor> getAllVisitors() {
-        return repository.findAll();
+    public List<VisitLog> getLogsByVisitor(Long visitorId) {
+
+        Visitor visitor = visitorRepository.findById(visitorId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Visitor not found"));
+
+        return visitLogRepository.findByVisitor(visitor);
     }
 }
