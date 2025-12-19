@@ -17,12 +17,17 @@ public class VisitLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    // Visitor comes from path variable, not request body
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "visitor_id")
     private Visitor visitor;
 
     private LocalDateTime entryTime;
+
     private LocalDateTime exitTime;
+
     private String purpose;
+
     private String location;
 
     @PrePersist
