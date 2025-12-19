@@ -1,10 +1,10 @@
-package com.example.demo.service;
+// package com.example.demo.service;
 
-import com.example.demo.model.RiskScore;
+// import com.example.demo.model.RiskScore;
 
-public interface RiskScoreService {
+// public interface RiskScoreService {
 
-    RiskScore calculateRiskScore(Long visitorId);
+//     RiskScore calculateRiskScore(Long visitorId);
 
-    RiskScore getRiskScore(Long id);
-}
+//     RiskScore getRiskScore(Long id);
+// }
