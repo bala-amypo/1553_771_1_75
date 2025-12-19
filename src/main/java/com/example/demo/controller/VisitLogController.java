@@ -1,53 +1,41 @@
-package com.example.demo.service.impl;
+package com.example.demo.controller;
 
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.VisitLog;
-import com.example.demo.model.Visitor;
-import com.example.demo.repository.VisitLogRepository;
-import com.example.demo.repository.VisitorRepository;
 import com.example.demo.service.VisitLogService;
-import org.springframework.stereotype.Service;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Service
-public class VisitLogServiceImpl implements VisitLogService {
+@RestController
+@RequestMapping("/api/visit-logs")
+@Tag(name = "Visit Logs")
+public class VisitLogController {
 
-    private final VisitLogRepository visitLogRepository;
-    private final VisitorRepository visitorRepository;
+    private final VisitLogService visitLogService;
 
-    public VisitLogServiceImpl(VisitLogRepository visitLogRepository,
-                               VisitorRepository visitorRepository) {
-        this.visitLogRepository = visitLogRepository;
-        this.visitorRepository = visitorRepository;
+    public VisitLogController(VisitLogService visitLogService) {
+        this.visitLogService = visitLogService;
     }
 
-    @Override
-    public VisitLog createVisitLog(Long visitorId, VisitLog log) {
-        Visitor visitor = visitorRepository.findById(visitorId)
-                .orElseThrow(() -> new ResourceNotFoundException("Visitor not found"));
+    @PostMapping("/{visitorId}")
+    public VisitLog createVisitLog(
+            @PathVariable Long visitorId,
+            @RequestBody VisitLog log) {
 
-        if (log.getExitTime() != null &&
-                log.getExitTime().isBefore(log.getEntryTime())) {
-            throw new IllegalArgumentException("exitTime must be after entryTime");
-        }
-
-        if (log.getPurpose() == null || log.getLocation() == null) {
-            throw new IllegalArgumentException("purpose and location required");
-        }
-
-        log.setVisitor(visitor);
-        return visitLogRepository.save(log);
+        // ❌ NO validation here
+        // ❌ NO setters here
+        // ✅ Service handles everything
+        return visitLogService.createVisitLog(visitorId, log);
     }
 
-    @Override
-    public VisitLog getLog(Long id) {
-        return visitLogRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("VisitLog not found"));
+    @GetMapping("/{id}")
+    public VisitLog getLog(@PathVariable Long id) {
+        return visitLogService.getLog(id);
     }
 
-    @Override
-    public List<VisitLog> getLogsByVisitor(Long visitorId) {
-        return visitLogRepository.findByVisitorId(visitorId);
+    @GetMapping("/visitor/{visitorId}")
+    public List<VisitLog> getLogsByVisitor(@PathVariable Long visitorId) {
+        return visitLogService.getLogsByVisitor(visitorId);
     }
 }
