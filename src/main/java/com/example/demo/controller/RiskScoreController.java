@@ -1,15 +1,12 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.RiskScore;
-import com.example.demo.service.RiskScoreService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.example.demo.model.RiskScore;
+import com.example.demo.service.RiskScoreService;
 
 @RestController
 @RequestMapping("/api/risk-scores")
-@Tag(name = "Risk Scores")
 public class RiskScoreController {
 
     private final RiskScoreService riskScoreService;
@@ -18,18 +15,13 @@ public class RiskScoreController {
         this.riskScoreService = riskScoreService;
     }
 
-    @PostMapping("/evaluate/{visitorId}")
-    public RiskScore evaluate(@PathVariable Long visitorId) {
-        return riskScoreService.evaluateVisitor(visitorId);
+    @PostMapping("/calculate/{visitorId}")
+    public RiskScore calculate(@PathVariable Long visitorId) {
+        return riskScoreService.calculateRiskScore(visitorId);
     }
 
-    @GetMapping("/{visitorId}")
-    public RiskScore getScore(@PathVariable Long visitorId) {
-        return riskScoreService.getScoreForVisitor(visitorId);
-    }
-
-    @GetMapping
-    public List<RiskScore> getAllScores() {
-        return riskScoreService.getAllScores();
+    @GetMapping("/{id}")
+    public RiskScore getById(@PathVariable Long id) {
+        return riskScoreService.getRiskScore(id);
     }
 }
