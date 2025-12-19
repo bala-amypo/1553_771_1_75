@@ -1,70 +1,52 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.model.VisitLog;
 import com.example.demo.model.Visitor;
-import com.example.demo.repository.VisitLogRepository;
 import com.example.demo.repository.VisitorRepository;
-import com.example.demo.service.VisitLogService;
+import com.example.demo.service.VisitorService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class VisitLogServiceImpl implements VisitLogService {
+public class VisitorServiceImpl implements VisitorService {
 
-    private final VisitLogRepository visitLogRepository;
     private final VisitorRepository visitorRepository;
 
-    public VisitLogServiceImpl(VisitLogRepository visitLogRepository,
-                               VisitorRepository visitorRepository) {
-        this.visitLogRepository = visitLogRepository;
+    // ✔ Constructor Injection (MANDATORY for tests)
+    public VisitorServiceImpl(VisitorRepository visitorRepository) {
         this.visitorRepository = visitorRepository;
     }
 
-    // ✅ CREATE VISIT LOG
     @Override
-    public VisitLog createVisitLog(Long visitorId, VisitLog log) {
+    public Visitor createVisitor(Visitor visitor) {
 
-        Visitor visitor = visitorRepository.findById(visitorId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Visitor not found"));
-
-        if (log.getPurpose() == null || log.getPurpose().isBlank()) {
-            throw new IllegalArgumentException("purpose required");
+        // ✔ Mandatory validation (TEST EXPECTED)
+        if (visitor.getPhone() == null || visitor.getPhone().isBlank()) {
+            throw new IllegalArgumentException("phone required");
         }
 
-        if (log.getLocation() == null || log.getLocation().isBlank()) {
-            throw new IllegalArgumentException("location required");
+        if (visitor.getFullName() == null || visitor.getFullName().isBlank()) {
+            throw new IllegalArgumentException("fullName required");
         }
 
-        if (log.getExitTime() != null &&
-                log.getEntryTime() != null &&
-                log.getExitTime().isBefore(log.getEntryTime())) {
-            throw new IllegalArgumentException("exitTime must be after entryTime");
+        if (visitor.getIdProof() == null || visitor.getIdProof().isBlank()) {
+            throw new IllegalArgumentException("idProof required");
         }
 
-        log.setVisitor(visitor);
-
-        return visitLogRepository.save(log);
+        return visitorRepository.save(visitor);
     }
 
-    // ✅ GET SINGLE LOG
     @Override
-    public VisitLog getLog(Long id) {
-        return visitLogRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Visit log not found"));
-    }
-
-    // ✅ GET LOGS BY VISITOR (THIS FIXES YOUR ERROR)
-    @Override
-    public List<VisitLog> getLogsByVisitor(Long visitorId) {
-
-        Visitor visitor = visitorRepository.findById(visitorId)
+    public Visitor getVisitor(Long id) {
+        return visitorRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Visitor not found"));
+    }
 
-        return visitLogRepository.findByVisitor(visitor);
+    @Override
+    public List<Visitor> getAllVisitors() {
+        // ✔ MUST return empty list, NOT null
+        return visitorRepository.findAll();
     }
 }
