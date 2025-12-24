@@ -1,10 +1,10 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
+@Component   // ✅ THIS IS THE FIX
 public class JwtTokenProvider {
 
     public String createToken(Long userId, String email, Set<String> roles) {
@@ -15,7 +15,7 @@ public class JwtTokenProvider {
         return true;
     }
 
-    public Claims getClaims(String token) {
-        return Jwts.claims().setSubject("user");
+    public Object getClaims(String token) {
+        return null;
     }
 }
