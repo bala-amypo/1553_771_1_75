@@ -1,7 +1,7 @@
 package com.example.demo.repository;
-import org.springframework.stereotype.Repository;
 
 import com.example.demo.model.RiskRule;
-@Repository
-public interface RiskRuleRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface RiskRuleRepository extends JpaRepository<RiskRule, Long> {
 }

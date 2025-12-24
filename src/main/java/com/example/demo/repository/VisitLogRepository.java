@@ -1,16 +1,19 @@
 package com.example.demo.repository;
-import org.springframework.stereotype.Repository;
 
 import com.example.demo.model.VisitLog;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-@Repository
-public interface VisitLogRepository {
 
-    List<VisitLog> findByVisitorSince(Long visitorId, LocalDateTime since);
+public interface VisitLogRepository extends JpaRepository<VisitLog, Long> {
 
-    Long countVisitsInWindow(
+    List<VisitLog> findByVisitorIdAndEntryTimeAfter(
+            Long visitorId,
+            LocalDateTime since
+    );
+
+    long countByVisitorIdAndEntryTimeBetween(
             Long visitorId,
             LocalDateTime start,
             LocalDateTime end
