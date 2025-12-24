@@ -5,7 +5,7 @@ import com.example.demo.service.ScoreAuditLogService;
 
 import java.util.Collections;
 import java.util.List;
-
+@Service
 public class ScoreAuditLogServiceImpl implements ScoreAuditLogService {
 
     @Override

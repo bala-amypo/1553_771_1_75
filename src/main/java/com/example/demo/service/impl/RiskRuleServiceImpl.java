@@ -5,7 +5,7 @@ import com.example.demo.service.RiskRuleService;
 
 import java.util.Collections;
 import java.util.List;
-
+@Service
 public class RiskRuleServiceImpl implements RiskRuleService {
 
     @Override

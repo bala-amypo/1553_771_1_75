@@ -8,7 +8,7 @@ import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;

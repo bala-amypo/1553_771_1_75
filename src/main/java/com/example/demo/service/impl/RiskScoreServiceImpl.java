@@ -6,7 +6,7 @@ import com.example.demo.util.RiskLevelUtils;
 
 import java.util.Collections;
 import java.util.List;
-
+@Service
 public class RiskScoreServiceImpl implements RiskScoreService {
 
     @Override
