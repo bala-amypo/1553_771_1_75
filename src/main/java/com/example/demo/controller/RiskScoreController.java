@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/risk-scores")
-@Tag(name = "RiskScore")
+@Tag(name = "Risk Score APIs")
 public class RiskScoreController {
 
     private final RiskScoreService riskScoreService;
@@ -20,21 +20,13 @@ public class RiskScoreController {
     }
 
     @PostMapping("/evaluate/{visitorId}")
-    public ResponseEntity<RiskScore> evaluate(
-            @PathVariable Long visitorId) {
-
-        return ResponseEntity.ok(
-                riskScoreService.evaluateVisitor(visitorId)
-        );
+    public ResponseEntity<RiskScore> evaluate(@PathVariable Long visitorId) {
+        return ResponseEntity.ok(riskScoreService.evaluateVisitor(visitorId));
     }
 
     @GetMapping("/{visitorId}")
-    public ResponseEntity<RiskScore> get(
-            @PathVariable Long visitorId) {
-
-        return ResponseEntity.ok(
-                riskScoreService.getScoreForVisitor(visitorId)
-        );
+    public ResponseEntity<RiskScore> get(@PathVariable Long visitorId) {
+        return ResponseEntity.ok(riskScoreService.getScoreForVisitor(visitorId));
     }
 
     @GetMapping

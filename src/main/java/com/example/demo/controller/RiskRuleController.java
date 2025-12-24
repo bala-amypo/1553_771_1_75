@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/risk-rules")
-@Tag(name = "RiskRule")
+@Tag(name = "Risk Rule APIs")
 public class RiskRuleController {
 
     private final RiskRuleService riskRuleService;

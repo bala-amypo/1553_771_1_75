@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/visit-logs")
-@Tag(name = "VisitLog")
+@Tag(name = "Visit Log APIs")
 public class VisitLogController {
 
     private final VisitLogService visitLogService;
@@ -23,10 +23,7 @@ public class VisitLogController {
     public ResponseEntity<VisitLog> create(
             @PathVariable Long visitorId,
             @RequestBody VisitLog log) {
-
-        return ResponseEntity.ok(
-                visitLogService.createVisitLog(visitorId, log)
-        );
+        return ResponseEntity.ok(visitLogService.createVisitLog(visitorId, log));
     }
 
     @GetMapping("/{id}")
@@ -35,11 +32,7 @@ public class VisitLogController {
     }
 
     @GetMapping("/visitor/{visitorId}")
-    public ResponseEntity<List<VisitLog>> listByVisitor(
-            @PathVariable Long visitorId) {
-
-        return ResponseEntity.ok(
-                visitLogService.getLogsByVisitor(visitorId)
-        );
+    public ResponseEntity<List<VisitLog>> listByVisitor(@PathVariable Long visitorId) {
+        return ResponseEntity.ok(visitLogService.getLogsByVisitor(visitorId));
     }
 }

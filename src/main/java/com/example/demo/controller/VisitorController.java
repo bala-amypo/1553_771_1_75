@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/visitors")
-@Tag(name = "Visitor")
+@Tag(name = "Visitor APIs")
 public class VisitorController {
 
     private final VisitorService visitorService;

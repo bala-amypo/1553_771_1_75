@@ -10,13 +10,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/audit-logs")
-@Tag(name = "ScoreAuditLog")
+@Tag(name = "Audit Log APIs")
 public class ScoreAuditLogController {
 
-    private final ScoreAuditLogService scoreAuditLogService;
+    private final ScoreAuditLogService service;
 
-    public ScoreAuditLogController(ScoreAuditLogService scoreAuditLogService) {
-        this.scoreAuditLogService = scoreAuditLogService;
+    public ScoreAuditLogController(ScoreAuditLogService service) {
+        this.service = service;
     }
 
     @PostMapping("/{visitorId}/{ruleId}")
@@ -24,23 +24,16 @@ public class ScoreAuditLogController {
             @PathVariable Long visitorId,
             @PathVariable Long ruleId,
             @RequestBody ScoreAuditLog log) {
-
-        return ResponseEntity.ok(
-                scoreAuditLogService.logScoreChange(visitorId, ruleId, log)
-        );
+        return ResponseEntity.ok(service.logScoreChange(visitorId, ruleId, log));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ScoreAuditLog> get(@PathVariable Long id) {
-        return ResponseEntity.ok(scoreAuditLogService.getLog(id));
+        return ResponseEntity.ok(service.getLog(id));
     }
 
     @GetMapping("/visitor/{visitorId}")
-    public ResponseEntity<List<ScoreAuditLog>> logsByVisitor(
-            @PathVariable Long visitorId) {
-
-        return ResponseEntity.ok(
-                scoreAuditLogService.getLogsByVisitor(visitorId)
-        );
+    public ResponseEntity<List<ScoreAuditLog>> logsByVisitor(@PathVariable Long visitorId) {
+        return ResponseEntity.ok(service.getLogsByVisitor(visitorId));
     }
 }
