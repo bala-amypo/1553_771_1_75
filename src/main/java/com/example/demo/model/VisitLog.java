@@ -6,25 +6,24 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class VisitLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Visitor visitor;
+    private String purpose;
+    private String location;
 
     private LocalDateTime entryTime;
     private LocalDateTime exitTime;
 
-    private String purpose;
-    private String location;
+    @ManyToOne
+    private Visitor visitor;
 
     @PrePersist
     public void prePersist() {
