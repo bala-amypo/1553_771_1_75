@@ -4,7 +4,10 @@ import com.example.demo.dto.AuthRequest;
 import com.example.demo.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+@RestController
+@RequestMapping("/api/auth")
 @Tag(name = "Auth")
 public class AuthController {
 
@@ -14,15 +17,19 @@ public class AuthController {
         this.userService = userService;
     }
 
-    public ResponseEntity<?> register(Object req) {
-        Object result = userService.register(req);
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody Object request) {
+
+        Object result = userService.register(request);
+
         if (result instanceof ResponseEntity) {
             return (ResponseEntity<?>) result;
         }
         return ResponseEntity.ok(result);
     }
 
-    public ResponseEntity<?> login(AuthRequest req) {
-        return ResponseEntity.ok(userService.login(req));
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
+        return ResponseEntity.ok(userService.login(request));
     }
 }
