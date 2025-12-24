@@ -3,33 +3,28 @@ package com.example.demo.controller;
 import com.example.demo.model.RiskRule;
 import com.example.demo.service.RiskRuleService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/risk-rules")
-@Tag(name = "Risk Rules")
+@Tag(name = "RiskRule")
 public class RiskRuleController {
 
-    private final RiskRuleService riskRuleService;
+    private final RiskRuleService service;
 
-    public RiskRuleController(RiskRuleService riskRuleService) {
-        this.riskRuleService = riskRuleService;
+    public RiskRuleController(RiskRuleService service) {
+        this.service = service;
     }
 
-    @PostMapping
-    public RiskRule createRule(@RequestBody RiskRule rule) {
-        return riskRuleService.createRule(rule);
+    public ResponseEntity<RiskRule> create(RiskRule rule) {
+        return ResponseEntity.ok(service.createRule(rule));
     }
 
-    @GetMapping("/{id}")
-    public RiskRule getRule(@PathVariable Long id) {
-        return riskRuleService.getRule(id);
+    public ResponseEntity<RiskRule> get(Long id) {
+        return ResponseEntity.ok(service.getRule(id));
     }
 
-    @GetMapping
-    public List<RiskRule> getAllRules() {
-        return riskRuleService.getAllRules();
+    public ResponseEntity<List<RiskRule>> all() {
+        return ResponseEntity.ok(service.getAllRules());
     }
 }

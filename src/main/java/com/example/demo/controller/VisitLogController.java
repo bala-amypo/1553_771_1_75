@@ -3,39 +3,28 @@ package com.example.demo.controller;
 import com.example.demo.model.VisitLog;
 import com.example.demo.service.VisitLogService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/visit-logs")
-@Tag(name = "Visit Logs")
+@Tag(name = "VisitLog")
 public class VisitLogController {
 
-    private final VisitLogService visitLogService;
+    private final VisitLogService service;
 
-    public VisitLogController(VisitLogService visitLogService) {
-        this.visitLogService = visitLogService;
+    public VisitLogController(VisitLogService service) {
+        this.service = service;
     }
 
-    @PostMapping("/{visitorId}")
-    public VisitLog createVisitLog(
-            @PathVariable Long visitorId,
-            @RequestBody VisitLog log) {
-
-        // ❌ NO validation here
-        // ❌ NO setters here
-        // ✅ Service handles everything
-        return visitLogService.createVisitLog(visitorId, log);
+    public ResponseEntity<VisitLog> create(Long visitorId, VisitLog log) {
+        return ResponseEntity.ok(service.createVisitLog(visitorId, log));
     }
 
-    @GetMapping("/{id}")
-    public VisitLog getLog(@PathVariable Long id) {
-        return visitLogService.getLog(id);
+    public ResponseEntity<VisitLog> get(Long id) {
+        return ResponseEntity.ok(service.getLog(id));
     }
 
-    @GetMapping("/visitor/{visitorId}")
-    public List<VisitLog> getLogsByVisitor(@PathVariable Long visitorId) {
-        return visitLogService.getLogsByVisitor(visitorId);
+    public ResponseEntity<List<VisitLog>> listByVisitor(Long visitorId) {
+        return ResponseEntity.ok(service.getLogsByVisitor(visitorId));
     }
 }
