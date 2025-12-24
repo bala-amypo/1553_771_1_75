@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.model.VisitLog;
 import com.example.demo.service.VisitLogService;
+import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;

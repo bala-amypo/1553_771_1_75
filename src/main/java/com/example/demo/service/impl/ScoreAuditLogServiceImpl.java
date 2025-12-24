@@ -1,4 +1,5 @@
 package com.example.demo.service.impl;
+import org.springframework.stereotype.Service;
 
 import com.example.demo.model.ScoreAuditLog;
 import com.example.demo.service.ScoreAuditLogService;
