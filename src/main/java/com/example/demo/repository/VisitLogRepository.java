@@ -4,7 +4,7 @@ import com.example.demo.model.VisitLog;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+@Repository
 public interface VisitLogRepository {
 
     List<VisitLog> findByVisitorSince(Long visitorId, LocalDateTime since);
