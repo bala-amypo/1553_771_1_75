@@ -1,29 +1,17 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.VisitLog;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface VisitLogRepository extends JpaRepository<VisitLog, Long> {
+public interface VisitLogRepository {
 
-    // Get all logs for a visitor
-    List<VisitLog> findByVisitorId(Long visitorId);
+    List<VisitLog> findByVisitorSince(Long visitorId, LocalDateTime since);
 
-    // Get logs after a specific time
-    List<VisitLog> findByVisitorIdAndEntryTimeAfter(
-            Long visitorId,
-            LocalDateTime since
-    );
-
-    // Count visits in a time window (advanced use)
-    long countByVisitorIdAndEntryTimeBetween(
+    Long countVisitsInWindow(
             Long visitorId,
             LocalDateTime start,
             LocalDateTime end
     );
-
-    // ✅ REQUIRED for RiskScoreServiceImpl
-    long countByVisitorId(Long visitorId);
 }
