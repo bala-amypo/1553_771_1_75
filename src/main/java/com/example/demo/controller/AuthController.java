@@ -1,14 +1,15 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.AuthRequest;
+import com.example.demo.dto.RegisterRequest;
 import com.example.demo.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
-@Tag(name = "Auth")
+@RequestMapping("/auth")
+@Tag(name = "Auth APIs")
 public class AuthController {
 
     private final UserService userService;
@@ -18,14 +19,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Object request) {
-
-        Object result = userService.register(request);
-
-        if (result instanceof ResponseEntity) {
-            return (ResponseEntity<?>) result;
-        }
-        return ResponseEntity.ok(result);
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+        return (ResponseEntity<?>) userService.register(request);
     }
 
     @PostMapping("/login")
