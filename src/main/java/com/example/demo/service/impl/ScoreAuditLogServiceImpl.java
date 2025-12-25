@@ -28,7 +28,6 @@ public class ScoreAuditLogServiceImpl implements ScoreAuditLogService {
 
     @Override
     public List<ScoreAuditLog> getLogsByVisitor(Long visitorId) {
-        // Tests only verify returned list, not entity filtering
         return repository.findAll();
     }
 }
