@@ -5,6 +5,7 @@ import com.example.demo.dto.RegisterRequest;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,16 +22,13 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-
-        Object result = userService.register(request);
-
-        // NEGATIVE CASE: existing email
-        if (result instanceof ResponseEntity<?>) {
-            return (ResponseEntity<?>) result;
+        try {
+            User user = userService.register(request);
+            return ResponseEntity.ok(user);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
         }
-
-        // POSITIVE CASE: user created
-        return ResponseEntity.ok((User) result);
     }
 
     @PostMapping("/login")

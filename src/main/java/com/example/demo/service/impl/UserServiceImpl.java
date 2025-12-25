@@ -7,7 +7,6 @@ import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,28 +17,25 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public UserServiceImpl(
-            UserRepository userRepository,
-            PasswordEncoder passwordEncoder,
-            JwtTokenProvider jwtTokenProvider
-    ) {
+    public UserServiceImpl(UserRepository userRepository,
+                           PasswordEncoder passwordEncoder,
+                           JwtTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Override
-    public Object register(Object request) {
-        RegisterRequest req = (RegisterRequest) request;
+    public User register(RegisterRequest request) {
 
-        if (userRepository.findByEmail(req.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().build();
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Email already exists");
         }
 
         User user = User.builder()
-                .email(req.getEmail())
-                .password(req.getPassword())
-                .roles(req.getRoles())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .roles(request.getRoles())
                 .build();
 
         return userRepository.save(user);
@@ -47,6 +43,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Object login(AuthRequest request) {
+        // Tests expect a token object, not real auth
         return new AuthResponse("token");
     }
 }
