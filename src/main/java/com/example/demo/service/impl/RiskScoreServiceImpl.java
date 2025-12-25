@@ -1,12 +1,14 @@
 package com.example.demo.service.impl;
-import org.springframework.stereotype.Service;
 
 import com.example.demo.model.RiskScore;
+import com.example.demo.model.Visitor;
+import com.example.demo.repository.RiskScoreRepository;
+import com.example.demo.repository.VisitorRepository;
 import com.example.demo.service.RiskScoreService;
-import com.example.demo.util.RiskLevelUtils;
+import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
+
 @Service
 public class RiskScoreServiceImpl implements RiskScoreService {
 
@@ -21,12 +23,12 @@ public class RiskScoreServiceImpl implements RiskScoreService {
 
     @Override
     public RiskScore evaluateVisitor(Long visitorId) {
-        Visitor v = visitorRepository.findById(visitorId).orElseThrow();
-        RiskScore rs = new RiskScore();
-        rs.setVisitor(v);
-        rs.setTotalScore(0);
-        rs.setRiskLevel("LOW");
-        return riskScoreRepository.save(rs);
+        Visitor visitor = visitorRepository.findById(visitorId).orElseThrow();
+        RiskScore score = new RiskScore();
+        score.setVisitor(visitor);
+        score.setTotalScore(0);
+        score.setRiskLevel("LOW");
+        return riskScoreRepository.save(score);
     }
 
     @Override
