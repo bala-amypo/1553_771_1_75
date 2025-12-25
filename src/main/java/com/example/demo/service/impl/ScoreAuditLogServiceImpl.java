@@ -1,33 +1,37 @@
 package com.example.demo.service.impl;
-import org.springframework.stereotype.Service;
 
 import com.example.demo.model.ScoreAuditLog;
+import com.example.demo.repository.ScoreAuditLogRepository;
 import com.example.demo.service.ScoreAuditLogService;
+import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
+
 @Service
 public class ScoreAuditLogServiceImpl implements ScoreAuditLogService {
 
+    private final ScoreAuditLogRepository repository;
+
+    public ScoreAuditLogServiceImpl(ScoreAuditLogRepository repository) {
+        this.repository = repository;
+    }
+
     @Override
     public ScoreAuditLog logScoreChange(Long visitorId, Long ruleId, ScoreAuditLog log) {
-
-        if (log.getReason() == null || log.getReason().isEmpty()) {
-            throw new IllegalArgumentException("reason required");
-        }
-        return log;
+        return repository.save(log);
     }
 
     @Override
     public ScoreAuditLog getLog(Long id) {
-        if (id == 999L) {
-            throw new RuntimeException("not found");
-        }
-        return ScoreAuditLog.builder().id(id).build();
+        return repository.findById(id).orElseThrow();
     }
 
     @Override
     public List<ScoreAuditLog> getLogsByVisitor(Long visitorId) {
-        return Collections.emptyList();
+        return repository.findAll()
+                .stream()
+                .filter(l -> l.getVisitor() != null &&
+                             l.getVisitor().getId().equals(visitorId))
+                .toList();
     }
 }

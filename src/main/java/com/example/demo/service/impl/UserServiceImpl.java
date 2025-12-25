@@ -1,6 +1,6 @@
 package com.example.demo.service.impl;
-import org.springframework.stereotype.Service;
 
+import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.AuthResponse;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.model.User;
@@ -9,6 +9,8 @@ import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -27,9 +29,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Object register(Object reqObj) {
-
-        RegisterRequest req = (RegisterRequest) reqObj;
+    public Object register(Object request) {
+        RegisterRequest req = (RegisterRequest) request;
 
         if (userRepository.findByEmail(req.getEmail()).isPresent()) {
             return ResponseEntity.badRequest().build();
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Object login(Object reqObj) {
+    public Object login(AuthRequest request) {
         return new AuthResponse("token");
     }
 }
