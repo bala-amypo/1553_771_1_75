@@ -1,35 +1,46 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.VisitLog;
+import com.example.demo.model.Visitor;
+import com.example.demo.repository.VisitLogRepository;
+import com.example.demo.repository.VisitorRepository;
 import com.example.demo.service.VisitLogService;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
+
 @Service
 public class VisitLogServiceImpl implements VisitLogService {
 
+    private final VisitLogRepository visitLogRepository;
+    private final VisitorRepository visitorRepository;
+
+    public VisitLogServiceImpl(
+            VisitLogRepository visitLogRepository,
+            VisitorRepository visitorRepository
+    ) {
+        this.visitLogRepository = visitLogRepository;
+        this.visitorRepository = visitorRepository;
+    }
+
     @Override
     public VisitLog createVisitLog(Long visitorId, VisitLog log) {
-
-        if (log.getExitTime() != null &&
-            log.getEntryTime() != null &&
-            log.getExitTime().isBefore(log.getEntryTime())) {
-            throw new IllegalArgumentException("exitTime must be after entryTime");
-        }
-        return log;
+        Visitor visitor = visitorRepository.findById(visitorId).orElseThrow();
+        log.setVisitor(visitor);
+        return visitLogRepository.save(log);
     }
 
     @Override
     public VisitLog getLog(Long id) {
-        if (id == 999L) {
-            throw new RuntimeException("not found");
-        }
-        return new VisitLog();
+        return visitLogRepository.findById(id).orElseThrow();
     }
 
     @Override
     public List<VisitLog> getLogsByVisitor(Long visitorId) {
-        return Collections.emptyList();
+        return visitLogRepository.findAll()
+                .stream()
+                .filter(v -> v.getVisitor() != null &&
+                             v.getVisitor().getId().equals(visitorId))
+                .toList();
     }
 }

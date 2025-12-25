@@ -1,37 +1,33 @@
 package com.example.demo.service.impl;
-import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Visitor;
 import com.example.demo.repository.VisitorRepository;
 import com.example.demo.service.VisitorService;
+import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
+
 @Service
 public class VisitorServiceImpl implements VisitorService {
 
-    private final VisitorRepository repository;
+    private final VisitorRepository visitorRepository;
 
-    public VisitorServiceImpl(VisitorRepository repository) {
-        this.repository = repository;
+    public VisitorServiceImpl(VisitorRepository visitorRepository) {
+        this.visitorRepository = visitorRepository;
     }
 
     @Override
     public Visitor createVisitor(Visitor visitor) {
-        if (visitor.getPhone() == null) {
-            throw new IllegalArgumentException("phone required");
-        }
-        return visitor;
+        return visitorRepository.save(visitor);
     }
 
     @Override
     public Visitor getVisitor(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("not found"));
+        return visitorRepository.findById(id).orElseThrow();
     }
 
     @Override
     public List<Visitor> getAllVisitors() {
-        return Collections.emptyList();
+        return visitorRepository.findAll();
     }
 }
