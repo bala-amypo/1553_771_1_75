@@ -16,9 +16,9 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll()   // 👈 ALLOW EVERYTHING
+                .anyRequest().permitAll()   
             )
-            .formLogin(form -> form.disable()); // 👈 DISABLE LOGIN PAGE
+            .formLogin(form -> form.disable()); 
 
         return http.build();
     }

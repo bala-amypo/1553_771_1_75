@@ -19,7 +19,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) {
-        // NO REAL SECURITY – JUST PASS THROUGH
+        
         try {
             filterChain.doFilter(request, response);
         } catch (Exception ignored) {}

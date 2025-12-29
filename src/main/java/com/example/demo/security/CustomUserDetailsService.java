@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
 
-@Service   // ✅ REQUIRED
+@Service   
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;

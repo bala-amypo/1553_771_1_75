@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
-@Component   // ✅ THIS IS THE FIX
+@Component   
 public class JwtTokenProvider {
 
     public String createToken(Long userId, String email, Set<String> roles) {
